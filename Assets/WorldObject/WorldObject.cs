@@ -1,4 +1,5 @@
 using RTS;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldObject : MonoBehaviour
@@ -16,6 +17,7 @@ public class WorldObject : MonoBehaviour
     protected bool currentlySelected = false;
     protected Bounds selectionBounds;
     protected Rect playingArea = new(0.0f, 0.0f, 0.0f, 0.0f);
+    private List<Material> oldMaterials = new List<Material>();
 
     /*** Game Engine methods, all can be overridden by subclass ***/
 
@@ -142,5 +144,39 @@ public class WorldObject : MonoBehaviour
     public Bounds GetSelectionBounds()
     {
         return selectionBounds;
+    }
+
+    public void SetColliders(bool enabled)
+    {
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider collider in colliders) collider.enabled = enabled;
+    }
+
+    public void SetTransparentMaterial(Material material, bool storeExistingMaterial)
+    {
+        if (storeExistingMaterial) oldMaterials.Clear();
+        Renderer[] renderers = GetComponentsInChildren<Renderers>();
+        foreach (Renderer renderer in renderers)
+        {
+            if (storeExistingMaterial) oldMaterials.Add(renderer.material);
+            renderer.material = material;
+        }
+    }
+
+    public void RestoreMaterials()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderers>();
+        if (oldMaterials.Count == renderers.Length)
+        {
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                renderers[i].material = oldMaterials[i];
+            }
+        }
+    }
+
+    public void SetPlayingArea(Rect playingArea)
+    {
+        this.playingArea = playingArea;
     }
 }

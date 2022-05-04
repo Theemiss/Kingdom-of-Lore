@@ -81,26 +81,15 @@ public class UserInput : MonoBehaviour
     }
     private void MouseHover()
     {
-
         if (player.hud.MouseInBounds())
         {
-
-            GameObject hoverObject = FindHitObject();
-
-            if (hoverObject)
+            if (player.IsFindingBuildingLocation())
             {
-                if (player.SelectedObject) player.SelectedObject.SetHoverState(hoverObject);
-                else if (hoverObject.transform.name != "Ground")
-                {
-
-                    Player owner = hoverObject.transform.root.GetComponent<Player>();
-                    if (owner)
-                    {
-                        Unit unit = hoverObject.transform.parent.GetComponent<Unit>();
-                        Building building = hoverObject.transform.parent.GetComponent<Building>();
-                        if (owner.username == player.username && (unit || building)) player.hud.SetCursorState(CursorState.Select);
-                    }
-                }
+                player.FindBuildingLocation();
+            }
+            else
+            {
+                // existing behaviour goes here ...
             }
         }
     }

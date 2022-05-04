@@ -11,6 +11,10 @@ public class Player : MonoBehaviour
     public int StartWood, StartWoodLimit;
     public int StartFood, StartFoodLimit;
     private Dictionary<ResourceType, int> resources, resourceLimits;
+    public Material notAllowedMaterial, allowedMaterial;
+    private Building tempBuilding;
+    private Unit tempCreator;
+    private bool findingPlacement = false;
     // Start is called before the first frame update
     private Dictionary<ResourceType, int> InitResourceList()
     {
@@ -77,8 +81,35 @@ public class Player : MonoBehaviour
         if (unitObject && spawnPoint != rallyPoint) unitObject.StartMove(rallyPoint);
         if (unitObject)
         {
-            unitObject.Init(creator);
+            unitObject.SetBuilding(creator);
             if (spawnPoint != rallyPoint) unitObject.StartMove(rallyPoint);
         }
+    }
+
+    public void CreateBuilding(string buildingName, Vector3 buildPoint, Unit creator, Rect playingArea)
+    {
+        GameObject newBuilding = (GameObject)Instantiate(ResourceManager.GetBuilding(buildingName), buildPoint, new Quaternion());
+        tempBuilding = newBuilding.GetComponent<Building>();
+        if (tempBuilding)
+        {
+            tempCreator = creator;
+            findingPlacement = true;
+            tempBuilding.SetTransparentMaterial(notAllowedMaterial, true);
+            tempBuilding.SetColliders(false);
+            tempBuilding.SetPlayingArea(playingArea);
+        }
+        else Destroy(newBuilding);
+    }
+
+    public bool IsFindingBuildingLocation()
+    {
+        return findingPlacement;
+    }
+
+    public void FindBuildingLocation()
+    {
+        Vector3 newLocation = WorkManager.FindHitPoint();
+        newLocation.y = 0;
+        tempBuilding.transform.position = newLocation;
     }
 }

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using RTS;
+using UnityEngine;
 public class Peasant : Unit
 {
     public float collectionAmount, depositAmount;
@@ -58,9 +56,9 @@ public class Peasant : Unit
             }
         }
     }
-    public override void Init(Building creator)
+    public override void SetBuilding(Building creator)
     {
-        base.Init(creator);
+        base.SetBuilding(creator);
         resourceStore = creator;
     }
     protected override void DrawSelectionBox(Rect selectBox)
