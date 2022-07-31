@@ -9,7 +9,7 @@ public class Refinery : Building
     protected override void Start()
     {
         base.Start();
-        actions = new string[] { "Peasant" };
+        actions = new string[] { "Peasant", "Worker" };
     }
 
     public override void PerformAction(string actionToPerform)

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Building : WorldObject
 {
-    public float maxBuildProgress;
+    public float maxBuildProgress = 10.0f;
     protected Queue<string> buildQueue;
     private float currentBuildProgress = 0.0f;
     private Vector3 spawnPoint;
     protected Vector3 rallyPoint;
     public Texture2D rallyPointImage, sellImage;
-
+    private bool needsBuilding = false;
     protected override void Awake()
     {
         base.Awake();
@@ -21,11 +21,11 @@ public class Building : WorldObject
         //float spawnZ = selectionBounds.center.z + transform.forward.z + selectionBounds.extents.z + transform.forward.z * 10;
         float spawnX = this.transform.position.x;
         float spawnZ = this.transform.position.z;
-        float spawnY = this.transform.position.y + 1.5f;
+        float spawnY = this.transform.position.y;
         // spawn point is the first spawn should be the base building
         spawnPoint = new Vector3(spawnX, spawnY, spawnZ);
         // rally point is the  place where troops go after spawning
-        rallyPoint = new Vector3(spawnX+10, spawnY, spawnZ);
+        rallyPoint = new Vector3(spawnX+5, spawnY, spawnZ);
 
     }
     public void Sell()
@@ -71,6 +71,7 @@ public class Building : WorldObject
     protected override void OnGUI()
     {
         base.OnGUI();
+        if (needsBuilding) DrawBuildProgress();
     }
     public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller)
     {
@@ -105,6 +106,7 @@ public class Building : WorldObject
             }
         }
     }
+
     public bool hasSpawnPoint()
     {
         return spawnPoint != ResourceManager.InvalidPosition && rallyPoint != ResourceManager.InvalidPosition;
@@ -142,5 +144,42 @@ public class Building : WorldObject
                 if (flag && player.human) flag.Disable();
             }
         }
+    }
+
+    public void StartConstruction()
+    {
+        CalculateBounds();
+        needsBuilding = true;
+        hitPoints = 0;
+    }
+
+    public bool UnderConstruction()
+    {
+        return needsBuilding;
+    }
+
+    public void Construct(int amount)
+    {
+        hitPoints += amount;
+        if (hitPoints >= maxHitPoints)
+        {
+            hitPoints = maxHitPoints;
+            needsBuilding = false;
+            RestoreMaterials();
+            SetTeamColor();
+        }
+    }
+
+    /*** Private Methods ***/
+
+    private void DrawBuildProgress()
+    {
+        GUI.skin = ResourceManager.SelectBoxSkin;
+        Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);
+        //Draw the selection box around the currently selected object, within the bounds of the main draw area
+        GUI.BeginGroup(playingArea);
+        CalculateCurrentHealth(0.5f, 0.99f);
+        DrawHealthBar(selectBox, "Building ...");
+        GUI.EndGroup();
     }
 }

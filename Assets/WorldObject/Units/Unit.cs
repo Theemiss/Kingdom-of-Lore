@@ -70,19 +70,19 @@ public class Unit : WorldObject
             {
                 float x = hitPoint.x;
                 //makes sure that the unit stays on top of the surface it is on
-                float y = hitPoint.y + player.SelectedObject.transform.position.y;
+                float y = hitPoint.y /*+ player.SelectedObject.transform.position.y*/;
                 float z = hitPoint.z;
                 Vector3 destination = new Vector3(x, y, z);
                 StartMove(destination);
             }
         }
     }
-    public virtual void Init(Building creator)
+    public virtual  void SetBuilding(Building building)
     {
         //specific initialization for a unit can be specified here
     }
 
-    public void StartMove(Vector3 destination)
+    public virtual  void StartMove(Vector3 destination)
     {
         this.destination = destination;
         destinationTarget = null;
@@ -90,7 +90,7 @@ public class Unit : WorldObject
         rotating = true;
         moving = false;
     }
-    public void StartMove(Vector3 destination, GameObject destinationTarget)
+    public  void StartMove(Vector3 destination, GameObject destinationTarget)
     {
         StartMove(destination);
         this.destinationTarget = destinationTarget;
@@ -148,10 +148,12 @@ public class Unit : WorldObject
     }
     private void MakeMove()
     {
-        //CharacterController controller = this.GetComponentInChildren<CharacterController>();
-        //controller.SimpleMove(destination *  Time.deltaTime * moveSpeed);
         transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
-        if (transform.position == destination) moving = false;
+        if (transform.position == destination)
+        {
+            moving = false;
+            movingIntoPosition = false;
+        }
         CalculateBounds();
     }
 }

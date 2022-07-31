@@ -57,11 +57,16 @@ public class Peasant : Unit
                 }
             }
         }
+        
+
+
+
+
     }
-    public override void Init(Building creator)
+    public override void SetBuilding(Building store)
     {
-        base.Init(creator);
-        resourceStore = creator;
+        base.SetBuilding(store);
+        resourceStore = store;
     }
     protected override void DrawSelectionBox(Rect selectBox)
     {
