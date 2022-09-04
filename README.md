@@ -8,10 +8,16 @@ Amin BONDI
  as Portfolio Project for 
 Holberton
  during of period of a month and half
-
+## Media
+* [Youtube](https://www.youtube.com/watch?v=_GYAjp8UHaQ&feature=emb_logo)
 * [Article](https://midinfotn401.medium.com/the-end-of-journey-kingdom-of-lore-bb56a135fe23)
+## Requirments
 
+## Technologies
+* C#
+* Unity
 
+## Assets 
 ## Authors
 
 * [Ahmed Belhaj](https://github.com/Theemiss/)
