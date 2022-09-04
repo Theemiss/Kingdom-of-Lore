@@ -8,3 +8,5 @@ Amin BONDI
  as Portfolio Project for 
 Holberton
  during of period of a month and half
+
+* [Article](https://midinfotn401.medium.com/the-end-of-journey-kingdom-of-lore-bb56a135fe23)
